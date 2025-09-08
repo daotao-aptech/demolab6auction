@@ -13,6 +13,17 @@ builder.Services.AddSignalR();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyHeader()
+              .AllowAnyMethod()
+              .SetIsOriginAllowed(_ => true) // allow any origin
+              .AllowCredentials();
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -46,6 +57,8 @@ app.MapGet("/weatherforecast", () =>
 
 app.MapControllers();
 app.MapHub<AuctionHub>("/auctionHub");
+
+app.UseCors();
 
 app.Run();
 
